@@ -9,7 +9,11 @@ from typing import Set
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("jail_dir", metavar="JAIL_DIR", help="Path to directory where jail chroot will be created")
+    parser.add_argument(
+        "jail_dir",
+        metavar="JAIL_DIR",
+        help="Path to directory where jail chroot will be created",
+    )
     args = parser.parse_args()
 
     script_dir = os.path.abspath(os.path.dirname(__file__))
@@ -40,7 +44,11 @@ def main():
         subprocess.check_call(["/usr/bin/rsync", "-ah", source_path, target_path])
 
         if stat.S_ISREG(st.st_mode):
-            otool_output = subprocess.check_output(["/usr/bin/otool", "-L", source_path]).decode("UTF-8").split("\n")
+            otool_output = (
+                subprocess.check_output(["/usr/bin/otool", "-L", source_path])
+                .decode("UTF-8")
+                .split("\n")
+            )
             for line in otool_output:
                 if not line.startswith("\t"):
                     continue

@@ -61,4 +61,6 @@ def main():
         elif stat.S_ISDIR(st.st_mode):
             for d, _, files in os.walk(source_path):
                 for f in files:
-                    queue.add(os.path.join(d, f))
+                    f_path = os.path.join(d, f)
+                    if f_path not in visited:
+                        queue.add(f_path)

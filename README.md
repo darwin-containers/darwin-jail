@@ -1,5 +1,7 @@
 # macos-jail
 
+[![GitHub Actions](https://github.com/slonopotamus/macos-jail/actions/workflows/CI/badge.svg?branch=master)](https://github.com/slonopotamus/macos-jail/actions/workflows/ci.yml?query=branch%3Amaster)
+
 ## Usage
 
 ```bash

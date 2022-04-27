@@ -1,0 +1,23 @@
+[project]
+name = "macos-jail"
+version = "0.0.1"
+description = "Chroot jail for macOS"
+requires-python = ">= 3.8"
+license = { file = "LICENSE" }
+readme = "README.md"
+authors = [
+    { name = "Marat Radchenko", email = "marat@slonopotamus.org" },
+]
+
+[build-system]
+requires = [
+    "setuptools >= 62",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+macos-jail = "macosjail:main"
+
+[tool.setuptools.package-data]
+"*" = ["mkjail.files"]

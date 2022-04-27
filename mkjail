@@ -22,7 +22,7 @@ cd "$RealExecDir"
     exit 1
 }
 JAILNAME="$1"
-JAILDIR="/jail/$JAILNAME"
+JAILDIR="$JAILNAME"
 
 FILES="$(cat mkjail.files)"
 
@@ -46,9 +46,9 @@ for file in $FILES; do
             echo "ERROR: Cannot create parent dir for: $JAILDIR$file"
             exit 1
         }
-        majmin="$(ls -l "$file" | awk '{print $5, $6}' | tr -d ,)"
+        majmin="$(ls -l "$file" | awk '{print $5}' | tr -d ,)"
         if [ ! -c $JAILDIR$file ]; then
-            mknod $JAILDIR$file c $majmin || {
+            sudo mknod $JAILDIR$file c $majmin || {
                 echo "ERROR: Failed to create device node: $JAILDIR$file"
                 exit 1
             }
@@ -65,7 +65,7 @@ for file in $FILES; do
             echo "ERROR: Cannot create parent dir for: $JAILDIR$file"
             exit 1
         }
-        cp $file $JAILDIR$file || {
+        sudo cp $file $JAILDIR$file || {
                 echo "ERROR: Failed to copy file into jail: $JAILDIR$file"
                 exit 1
         }
@@ -73,5 +73,5 @@ for file in $FILES; do
 done
 
 echo "+ Entering jail $JAILNAME..."
-chroot "$JAILDIR"
+chroot "$JAILDIR" /bin/sh
 # vim:ts=4:sw=4:et:cc=80:

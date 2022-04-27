@@ -1,0 +1,6 @@
+/bin/
+/dev/null
+/dev/urandom
+/dev/zero
+/System/Library/dyld/
+/usr/lib/dyld

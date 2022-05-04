@@ -5,8 +5,8 @@
 ## Prerequisites
 
 * MacOS Catalina or newer
-* Disable https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection[System Identity Protection]. 
-SIP https://github.com/containerd/containerd/discussions/5525#discussioncomment-2685649[doesn't allow] to `chroot`.
+* Disable [System Identity Protection](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection). 
+SIP [doesn't allow](https://github.com/containerd/containerd/discussions/5525#discussioncomment-2685649) to `chroot`.
 
 ## Usage
 

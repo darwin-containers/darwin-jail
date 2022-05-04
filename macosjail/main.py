@@ -76,5 +76,5 @@ def main():
 
     # I'm not sure what this file does
     chroot_marker = os.path.join(jail_dir, "AppleInternal", "XBS", ".isChrooted")
-    os.makedirs(os.path.dirname(chroot_marker))
+    os.makedirs(os.path.dirname(chroot_marker), exist_ok=True)
     open(chroot_marker, "a").close()

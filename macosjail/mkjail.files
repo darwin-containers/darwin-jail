@@ -1,6 +1,15 @@
-/bin/
+# devices
 /dev/null
 /dev/urandom
 /dev/zero
-/System/Library/dyld/
+
+# dyld + cache
+/System/Library/dyld/*x86_64
+/System/Library/dyld/*x86_64.*
 /usr/lib/dyld
+
+# binaries
+/bin/*
+/sbin/*
+/usr/bin/*
+/usr/sbin/*

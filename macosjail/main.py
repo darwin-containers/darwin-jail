@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import glob
 import os
 import stat
 import subprocess
@@ -20,7 +21,15 @@ def main():
 
     queue: Set[str] = set()
     with open(os.path.join(script_dir, "mkjail.files")) as f:
-        queue.update(f.read().splitlines())
+        for line in f.read().splitlines():
+            line = line.strip()
+            if len(line) <= 0:
+                continue
+
+            if line.startswith("#"):
+                continue
+
+            queue.update(glob.glob(line))
 
     visited: Set[str] = set()
 
@@ -64,3 +73,8 @@ def main():
                     f_path = os.path.join(d, f)
                     if f_path not in visited:
                         queue.add(f_path)
+
+    # I'm not sure what this file does
+    chroot_marker = os.path.join(jail_dir, "AppleInternal", "XBS", ".isChrooted")
+    os.makedirs(os.path.dirname(chroot_marker))
+    open(chroot_marker, "a").close()

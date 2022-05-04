@@ -9,7 +9,10 @@
 /usr/lib/dyld
 
 # binaries
-/bin/*
-/sbin/*
-/usr/bin/*
-/usr/sbin/*
+/bin/
+/sbin/
+/usr/bin/
+/usr/sbin/
+
+# configs
+/etc/ssl/

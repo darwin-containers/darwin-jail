@@ -4,7 +4,7 @@ version = "0.0.1"
 description = "Chroot jail for macOS"
 requires-python = ">= 3.8"
 license = { file = "LICENSE" }
-readme = "README.md"
+readme = "README.adoc"
 authors = [
     { name = "Marat Radchenko", email = "marat@slonopotamus.org" },
 ]

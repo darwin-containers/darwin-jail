@@ -98,3 +98,8 @@ def main():
     chroot_marker = os.path.join(jail_dir, "AppleInternal", "XBS", ".isChrooted")
     os.makedirs(os.path.dirname(chroot_marker), exist_ok=True)
     open(chroot_marker, "a").close()
+
+    mDNSResponder = os.path.join(jail_dir, "var", "run", "mDNSResponder")
+    os.makedirs(os.path.dirname(mDNSResponder), exist_ok=True)
+    # This makes DNS work inside chroot
+    os.link("/var/run/mDNSResponder", mDNSResponder)

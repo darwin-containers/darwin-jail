@@ -5,7 +5,14 @@ import glob
 import os
 import stat
 import subprocess
+from dataclasses import dataclass
 from typing import Set
+
+
+@dataclass
+class CopyOpts:
+    target: str
+    allow_absent: bool = False
 
 
 def main():
@@ -19,7 +26,7 @@ def main():
 
     script_dir = os.path.abspath(os.path.dirname(__file__))
 
-    queue: Set[str] = set()
+    queue: dict[str, CopyOpts] = dict()
     with open(os.path.join(script_dir, "mkjail.files")) as f:
         for line in f.read().splitlines():
             line = line.strip()
@@ -29,28 +36,41 @@ def main():
             if line.startswith("#"):
                 continue
 
-            queue.update(glob.glob(line))
+            parts = line.split(" ")
+
+            srcs = parts[0]
+            for src in glob.glob(srcs):
+                if len(parts) == 1:
+                    dst = parts[0]
+                elif len(parts) == 2:
+                    dst = parts[1]
+                else:
+                    raise AssertionError()
+                queue[src] = CopyOpts(target=dst)
 
     visited: Set[str] = set()
 
     jail_dir: str = args.jail_dir
 
     while len(queue) > 0:
-        source_path = queue.pop()
+        source_path, copy_opts = queue.popitem()
         visited.add(source_path)
 
         try:
             st = os.stat(source_path)
         except FileNotFoundError:
-            # This happens due to dynamic linker cache on Big Sur and later
-            continue
+            if copy_opts.allow_absent:
+                # This happens due to dynamic linker cache on Big Sur and later
+                continue
+            else:
+                raise
 
-        target_path = jail_dir + source_path
+        full_target_path = jail_dir + copy_opts.target
 
         # TODO: Preserve dir permissions
-        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+        os.makedirs(os.path.dirname(full_target_path), exist_ok=True)
 
-        subprocess.check_call(["/usr/bin/rsync", "-ah", source_path, target_path])
+        subprocess.check_call(["rsync", "-ah", source_path, full_target_path])
 
         if stat.S_ISREG(st.st_mode):
             otool_output = (
@@ -66,13 +86,13 @@ def main():
                 if dependency in visited:
                     continue
 
-                queue.add(dependency)
+                queue[dependency] = CopyOpts(target=dependency, allow_absent=True)
         elif stat.S_ISDIR(st.st_mode):
             for d, _, files in os.walk(source_path):
                 for f in files:
                     f_path = os.path.join(d, f)
-                    if f_path not in visited:
-                        queue.add(f_path)
+                    if f_path not in visited and f_path not in queue:
+                        queue[f_path] = CopyOpts(target=f_path)
 
     # I'm not sure what this file does
     chroot_marker = os.path.join(jail_dir, "AppleInternal", "XBS", ".isChrooted")

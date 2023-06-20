@@ -3,10 +3,15 @@
 /dev/urandom
 /dev/zero
 
-# dyld + cache
+/usr/lib/dyld
+# Big Sur+ dyld
 /System/Library/dyld/*x86_64
 /System/Library/dyld/*x86_64.*
-/usr/lib/dyld
+# Ventura+ dyld
+/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/*arm64e /System/Library/dyld/
+/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/*arm64e.* /System/Library/dyld/
+/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/*x86_64 /System/Library/dyld/
+/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/*x86_64.* /System/Library/dyld/
 
 # binaries
 /bin/

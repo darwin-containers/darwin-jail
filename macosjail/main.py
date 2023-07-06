@@ -99,7 +99,8 @@ def main():
     os.makedirs(os.path.dirname(chroot_marker), exist_ok=True)
     open(chroot_marker, "a").close()
 
-    mDNSResponder = os.path.join(jail_dir, "var", "run", "mDNSResponder")
-    os.makedirs(os.path.dirname(mDNSResponder), exist_ok=True)
-    # This makes DNS work inside chroot
-    os.link("/var/run/mDNSResponder", mDNSResponder)
+    # TODO: We do not want this to appear in docker image. Make separate build/run commands?
+    # mDNSResponder = os.path.join(jail_dir, "var", "run", "mDNSResponder")
+    # os.makedirs(os.path.dirname(mDNSResponder), exist_ok=True)
+    # # This makes DNS work inside chroot
+    # os.link("/var/run/mDNSResponder", mDNSResponder)

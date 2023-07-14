@@ -6,7 +6,7 @@
 
 * MacOS Catalina or newer
 * Disable [System Identity Protection](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection).
-SIP [doesn't allow](https://github.com/containerd/containerd/discussions/5525#discussioncomment-2685649) to `chroot`.
+SIP [doesn't allow](https://github.com/containerd/containerd/discussions/5525#discussioncomment-2685649) to `chroot` (not needed for building though).
 
 ## Usage
 
@@ -33,3 +33,5 @@ brew install crane
 
 sudo crane append --oci-empty-base --platform darwin -t "$image_tag" -f <(tar -f - -c "$jail_dir")
 ```
+
+If you want to run macOS image in [containerd](https://containerd.io), see [rund](https://github.com/slonopotamus/rund) project.

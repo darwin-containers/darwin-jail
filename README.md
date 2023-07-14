@@ -11,9 +11,9 @@ SIP [doesn't allow](https://github.com/containerd/containerd/discussions/5525#di
 ## Usage
 
 ```shell
-$ cd "$repo_root"
-$ sudo python3 -m macosjail "$jail_dir" # prepare chroot dir contents
-$ sudo chroot "$jail_dir" # enter chroot
+cd "$repo_root"
+sudo python3 -m macosjail "$jail_dir" # prepare chroot dir contents
+sudo chroot "$jail_dir" # enter chroot
 ```
 
 In order to make DNS work in chroot, run:

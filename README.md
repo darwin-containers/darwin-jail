@@ -11,7 +11,25 @@ SIP [doesn't allow](https://github.com/containerd/containerd/discussions/5525#di
 ## Usage
 
 ```shell
-$ cd <repo root>
-$ sudo python3 -m macosjail <jail dir> # prepare chroot dir contents
-$ sudo chroot <jail dir> # enter chroot
+$ cd "$repo_root"
+$ sudo python3 -m macosjail "$jail_dir" # prepare chroot dir contents
+$ sudo chroot "$jail_dir" # enter chroot
+```
+
+In order to make DNS work in chroot, run:
+
+```shell
+sudo mkdir -p "$jail_dir/var/run"
+sudo link -f /var/run/mDNSResponder "$jail_dir/var/run/mDNSResponder"
+```
+
+## Uploading macOS rootfs as Docker image
+
+```shell
+brew install crane
+
+# You might first need to authenticate using
+# crane auth login "$registry" -u "$username" -p "$password"
+
+sudo crane append --oci-empty-base --platform darwin -t "$image_tag" -f <(tar -f - -c "$jail_dir")
 ```

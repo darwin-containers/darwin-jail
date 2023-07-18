@@ -1,6 +1,6 @@
 # macos-jail
 
-[![Build Status](https://github.com/slonopotamus/macos-jail/workflows/CI/badge.svg?branch=master)](https://github.com/slonopotamus/macos-jail/actions?query=branch%3Amaster)
+[![Build Status](https://github.com/macOScontainers/macos-jail/workflows/CI/badge.svg?branch=master)](https://github.com/slonopotamus/macos-jail/actions?query=branch%3Amaster)
 
 ## Prerequisites
 
@@ -34,4 +34,4 @@ brew install crane
 sudo crane append --oci-empty-base --platform darwin -t "$image_tag" -f <(tar -f - -c -C "$jail_dir" .)
 ```
 
-If you want to run macOS image in [containerd](https://containerd.io), see [rund](https://github.com/slonopotamus/rund) project.
+If you want to run macOS image in [containerd](https://containerd.io), see [rund](https://github.com/macOScontainers/rund) project.

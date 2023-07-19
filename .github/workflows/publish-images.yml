@@ -1,5 +1,7 @@
 name: Publish images
 on: workflow_dispatch
+permissions:
+  packages: write
 jobs:
   publish:
     strategy:

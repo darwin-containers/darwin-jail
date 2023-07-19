@@ -1,0 +1,21 @@
+name: Publish images
+on: workflow_dispatch
+jobs:
+  publish:
+    strategy:
+      matrix:
+        include:
+          - os: macos-11
+            name: bigsur
+          - os: macos-12
+            name: monterey
+          - os: macos-13
+            name: ventura
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - run: brew install crane
+      - run: sudo python -m macosjail jail_dir
+      - run: sudo crane auth login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"
+      - run: sudo crane append --oci-empty-base --platform darwin -t "ghcr.io/macoscontainers/macos-jail/${{ matrix.name }}:latest" -f <(tar -f - -c -C jail_dir .)

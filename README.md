@@ -2,6 +2,9 @@
 
 [![Build Status](https://github.com/macOScontainers/macos-jail/workflows/CI/badge.svg?branch=master)](https://github.com/slonopotamus/macos-jail/actions?query=branch%3Amaster)
 
+| IMPORTANT: Images published in this repo are covered by [macOS EULA](https://www.apple.com/legal/sla/) and are only intended to be run on Apple hardware. |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+
 ## Prerequisites
 
 * MacOS Catalina or newer

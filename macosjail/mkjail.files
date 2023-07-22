@@ -1,5 +1,7 @@
 # devices
 /dev/null
+/dev/ptmx
+/dev/random
 /dev/urandom
 /dev/zero
 
@@ -21,3 +23,6 @@
 
 # configs
 /etc/ssl/
+
+/usr/share/terminfo/
+/usr/share/zoneinfo/

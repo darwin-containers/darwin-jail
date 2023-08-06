@@ -23,6 +23,6 @@
 
 # configs
 /etc/ssl/
-
+/System/Library/CoreServices/SystemVersion.plist
 /usr/share/terminfo/
 /usr/share/zoneinfo/

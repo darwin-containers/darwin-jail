@@ -24,5 +24,6 @@
 # configs
 /etc/ssl/
 /System/Library/CoreServices/SystemVersion.plist
+/System/Library/CoreServices/SystemVersionCompat.plist
 /usr/share/terminfo/
 /usr/share/zoneinfo/

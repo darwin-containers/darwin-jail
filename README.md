@@ -1,6 +1,7 @@
 # macos-jail
 
-[![Build Status](https://github.com/macOScontainers/macos-jail/workflows/CI/badge.svg?branch=main)](https://github.com/slonopotamus/macos-jail/actions?query=branch%main)
+
+[![Build Status](https://github.com/macOScontainers/macos-jail/workflows/CI/badge.svg?branch=main)](https://github.com/macOScontainers/macos-jail/actions?query=branch:main)
 
 > **Note**
 > Images published in this repo are covered by [macOS EULA](https://www.apple.com/legal/sla/) and are only intended to be run on Apple hardware.

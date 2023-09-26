@@ -1,6 +1,5 @@
 # macos-jail
 
-
 [![Build Status](https://github.com/macOScontainers/macos-jail/workflows/CI/badge.svg?branch=main)](https://github.com/macOScontainers/macos-jail/actions?query=branch:main)
 
 > **Note**

@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/macOScontainers/macos-jail/workflows/CI/badge.svg?branch=main)](https://github.com/macOScontainers/macos-jail/actions?query=branch:main)
 
 > **Note**
-> Images published in this repo are covered by [macOS EULA](https://www.apple.com/legal/sla/) and are only intended to be run on Apple hardware.
+> Artifacts published in this repo contain software covered by [macOS EULA](https://www.apple.com/legal/sla/) and are only intended to be run on Apple hardware.
 
 ## Prerequisites
 

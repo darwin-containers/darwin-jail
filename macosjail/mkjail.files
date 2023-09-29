@@ -17,6 +17,8 @@
 /sbin/
 /usr/bin/
 /usr/sbin/
+# TODO: Maybe we want the whole /usr/lib?
+/usr/lib/libobjc-trampolines.dylib
 
 # configs
 /etc/ssl/

@@ -20,4 +20,4 @@ jobs:
       - run: brew install crane
       - run: sudo python -m macosjail jail_dir
       - run: sudo crane auth login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"
-      - run: sudo bash -c 'crane append --oci-empty-base --platform darwin -t "ghcr.io/macoscontainers/macos-jail/${{ matrix.name }}:latest" -f <(tar -f - -c -C jail_dir .)'
+      - run: sudo bash -c 'crane append --oci-empty-base -t "ghcr.io/macoscontainers/macos-jail/${{ matrix.name }}:latest" -f <(tar -f - -c -C jail_dir .)'

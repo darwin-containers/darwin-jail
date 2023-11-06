@@ -34,7 +34,7 @@ brew install crane
 # You might first need to authenticate using
 # sudo crane auth login "$registry" -u "$username" -p "$password"
 
-sudo bash -c 'crane append --oci-empty-base --platform darwin -t "$image_tag" -f <(tar -f - -c -C "$jail_dir" .)'
+sudo bash -c 'crane append --oci-empty-base -t "$image_tag" -f <(tar -f - -c -C "$jail_dir" .)'
 ```
 
 If you want to run macOS image in [containerd](https://containerd.io), see [rund](https://github.com/macOScontainers/rund) project.

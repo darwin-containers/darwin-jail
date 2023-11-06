@@ -57,7 +57,7 @@ def main():
         visited.add(source_path)
 
         try:
-            st = os.stat(source_path)
+            st = os.lstat(source_path)
         except FileNotFoundError:
             if copy_opts.allow_absent:
                 # This happens due to dynamic linker cache on Big Sur and later

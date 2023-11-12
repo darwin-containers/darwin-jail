@@ -37,4 +37,4 @@ brew install crane
 sudo bash -c 'crane append --oci-empty-base -t "$image_tag" -f <(tar -f - -c -C "$jail_dir" .)'
 ```
 
-If you want to run macOS image in [containerd](https://containerd.io), see [rund](https://github.com/macOScontainers/rund) project.
+If you want to run macOS image using containerd or Docker, see [instructions](https://github.com/macOScontainers/homebrew-formula#macos-native-containers).

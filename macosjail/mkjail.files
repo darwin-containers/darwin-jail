@@ -14,6 +14,8 @@
 # binaries
 /bin/
 /sbin/
+/System/Library/Frameworks
+/System/Library/Perl
 /usr/bin/
 /usr/lib/
 /usr/libexec/

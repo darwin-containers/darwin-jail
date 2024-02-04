@@ -7,12 +7,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-11
-            name: bigsur
-          - os: macos-12
-            name: monterey
           - os: macos-13
             name: ventura
+          - os: macos-14
+            name: sonoma
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3

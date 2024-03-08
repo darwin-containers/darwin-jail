@@ -9,11 +9,11 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [
-          macos-13,
-          macos-14,
-        ]
-    runs-on: ${{ matrix.os }}
+        include:
+          - runner: "macos-13" # Ventura Intel
+          - runner: "flyci-macos-large-latest-m1" # Ventura ARM
+          - runner: "macos-14" # Sonoma ARM
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3

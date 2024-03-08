@@ -7,11 +7,13 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-13
-            name: ventura
-          - os: macos-14
-            name: sonoma
-    runs-on: ${{ matrix.os }}
+          - runner: "macos-13" # Ventura Intel
+            name: ventura-i386
+          - runner: "flyci-macos-large-latest-m1" # Ventura ARM
+            name: ventura-arm64
+          - runner: "macos-14" # Sonoma ARM
+            name: sonoma-arm64
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3

@@ -15,38 +15,34 @@ class CopyOpts:
     allow_absent: bool = False
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "jail_dir",
-        metavar="JAIL_DIR",
-        help="Path to directory where jail chroot will be created",
-    )
-    parser.add_argument(
-        "-f",
-        "--files",
-        default=[],
-        action="append",
-        metavar="JAIL_FILES",
-        help="Jail file(s) to use",
-    )
-    args = parser.parse_args()
+CONST_COMMENT_INSTRUCTION: str = "#"
+CONST_INCLUDE_INSTRUCTION: str = "@include"
 
-    files = args.files
-    if len(files) <= 0:
-        script_dir = os.path.abspath(os.path.dirname(__file__))
-        files = [os.path.join(script_dir, "mkjail.files")]
 
+def build_queue(input_files: [str]) -> dict[str, CopyOpts]:
+    files = list(input_files)
     queue: dict[str, CopyOpts] = dict()
-    for file in files:
+    visited: set[str] = set()
+
+    while len(files) > 0:
+        file = os.path.abspath(files.pop())
+
+        if file in visited:
+            raise AssertionError(f"same input file specified multiple times: {file}")
+        visited.add(file)
+
         with open(file) as f:
             for line in f.read().splitlines():
                 line = line.strip()
                 if len(line) <= 0:
                     continue
 
-                if line.startswith("#"):
+                if line.startswith(CONST_COMMENT_INSTRUCTION):
                     continue
+
+                if line.startswith(CONST_INCLUDE_INSTRUCTION):
+                    include_file = line[len(CONST_INCLUDE_INSTRUCTION):].strip()
+                    files.append(os.path.join(os.path.dirname(file), include_file))
 
                 parts = line.split(" ")
 
@@ -60,9 +56,11 @@ def main():
                         raise AssertionError()
                     queue[src] = CopyOpts(target=dst)
 
-    visited: Set[str] = set()
+    return queue
 
-    jail_dir: str = args.jail_dir
+
+def copy_files(target_dir: str, queue: dict[str, CopyOpts]) -> None:
+    visited: Set[str] = set()
 
     while len(queue) > 0:
         source_path, copy_opts = queue.popitem()
@@ -77,7 +75,7 @@ def main():
             else:
                 raise
 
-        full_target_path = jail_dir + copy_opts.target
+        full_target_path = target_dir + copy_opts.target
 
         # TODO: Preserve dir permissions
         os.makedirs(os.path.dirname(full_target_path), exist_ok=True)
@@ -106,8 +104,35 @@ def main():
                     if f_path not in visited and f_path not in queue:
                         queue[f_path] = CopyOpts(target=f_path)
 
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "jail_dir",
+        metavar="JAIL_DIR",
+        help="Path to directory where jail chroot will be created",
+    )
+    parser.add_argument(
+        "-f",
+        "--files",
+        default=[],
+        action="append",
+        metavar="JAIL_FILES",
+        help="Jail file(s) to use",
+    )
+    args = parser.parse_args()
+
+    files = args.files
+    if len(files) <= 0:
+        script_dir = os.path.abspath(os.path.dirname(__file__))
+        files = [os.path.join(script_dir, "mkjail.files")]
+
+    queue = build_queue(files)
+
+    copy_files(args.jail_dir, queue)
+
     # I'm not sure what this file does
-    chroot_marker = os.path.join(jail_dir, "AppleInternal", "XBS", ".isChrooted")
+    chroot_marker = os.path.join(args.jail_dir, "AppleInternal", "XBS", ".isChrooted")
     os.makedirs(os.path.dirname(chroot_marker), exist_ok=True)
     open(chroot_marker, "a").close()
 

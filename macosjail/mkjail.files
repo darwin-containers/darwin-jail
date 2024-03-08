@@ -5,6 +5,9 @@
 /dev/urandom
 /dev/zero
 
+# Big Sur+ dyld
+/System/Library/dyld/dyld_shared_cache_*
+
 # Ventura+ dyld
 /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_* /System/Library/dyld/
 

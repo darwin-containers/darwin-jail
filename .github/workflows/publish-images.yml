@@ -5,8 +5,13 @@ permissions:
 jobs:
   publish:
     strategy:
+      fail-fast: false
       matrix:
         include:
+          - os: macos-11
+            name: bigsur
+          - os: macos-12
+            name: monterey
           - os: macos-13
             name: ventura
           - os: macos-14

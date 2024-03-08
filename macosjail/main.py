@@ -41,7 +41,7 @@ def build_queue(input_files: [str]) -> dict[str, CopyOpts]:
                     continue
 
                 if line.startswith(CONST_INCLUDE_INSTRUCTION):
-                    include_file = line[len(CONST_INCLUDE_INSTRUCTION):].strip()
+                    include_file = line[len(CONST_INCLUDE_INSTRUCTION) :].strip()
                     files.append(os.path.join(os.path.dirname(file), include_file))
 
                 parts = line.split(" ")

@@ -1,13 +1,10 @@
-# macos-jail
+# darwin-jail
 
-[![Build Status](https://github.com/macOScontainers/macos-jail/workflows/CI/badge.svg?branch=main)](https://github.com/macOScontainers/macos-jail/actions?query=branch:main)
-
-> **Note**
-> Artifacts published in this repo contain software covered by [macOS EULA](https://www.apple.com/legal/sla/) and are only intended to be run on Apple hardware.
+[![Build Status](https://github.com/darwin-containers/darwin-jail/workflows/CI/badge.svg?branch=main)](https://github.com/darwin-containers/darwin-jail/actions?query=branch:main)
 
 ## Prerequisites
 
-* MacOS Ventura or newer
+* macOS Ventura or newer
 * Disable [System Identity Protection](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection).
 SIP [doesn't allow](https://github.com/containerd/containerd/discussions/5525#discussioncomment-2685649) to `chroot` (not needed for building though).
 
@@ -15,7 +12,7 @@ SIP [doesn't allow](https://github.com/containerd/containerd/discussions/5525#di
 
 ```shell
 cd "$repo_root"
-sudo python3 -m macosjail "$jail_dir" # prepare chroot dir contents
+sudo python3 -m darwinjail "$jail_dir" # prepare chroot dir contents
 sudo chroot "$jail_dir" # enter chroot
 ```
 
@@ -26,7 +23,7 @@ sudo mkdir -p "$jail_dir/var/run"
 sudo link -f /var/run/mDNSResponder "$jail_dir/var/run/mDNSResponder"
 ```
 
-## Uploading macOS rootfs as Docker image
+## Uploading Darwin rootfs as Docker image
 
 ```shell
 brew install crane
@@ -37,4 +34,4 @@ brew install crane
 sudo bash -c 'crane append --oci-empty-base -t "$image_tag" -f <(tar -f - -c -C "$jail_dir" .)'
 ```
 
-If you want to run macOS image using containerd or Docker, see [instructions](https://github.com/macOScontainers/homebrew-formula#macos-native-containers).
+If you want to run Darwin image using containerd or Docker, see [instructions](https://github.com/darwin-containers/homebrew-formula#darwin-native-containers).

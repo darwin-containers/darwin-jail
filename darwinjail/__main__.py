@@ -1,4 +1,4 @@
-# This file exists to make `python3 -m macosjail` work
+# This file exists to make `python3 -m darwinjail` work
 
 from .main import main
 

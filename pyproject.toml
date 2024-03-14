@@ -1,7 +1,7 @@
 [project]
-name = "macos-jail"
+name = "darwin-jail"
 version = "0.0.1"
-description = "Chroot jail for macOS"
+description = "Chroot jail for Darwin"
 requires-python = ">= 3.8"
 license = { file = "LICENSE" }
 readme = "README.md"
@@ -17,7 +17,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-macos-jail = "macosjail:main"
+darwin-jail = "darwinjail:main"
 
 [tool.setuptools.package-data]
 "*" = ["mkjail.files"]

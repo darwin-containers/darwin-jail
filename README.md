@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-* macOS Ventura or newer
+* Ventura or newer
 * Disable [System Identity Protection](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection).
 SIP [doesn't allow](https://github.com/containerd/containerd/discussions/5525#discussioncomment-2685649) to `chroot` (not needed for building though).
 

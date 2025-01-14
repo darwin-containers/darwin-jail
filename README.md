@@ -1,6 +1,6 @@
 # darwin-jail
 
-[![Build Status](https://github.com/darwin-containers/darwin-jail/workflows/CI/badge.svg?branch=main)](https://github.com/darwin-containers/darwin-jail/actions?query=branch:main)
+[![Build Status](https://github.com/darwin-containers/darwin-jail/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/darwin-containers/darwin-jail/actions?query=branch:main)
 
 ## Prerequisites
 

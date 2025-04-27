@@ -2,7 +2,7 @@ name: CI
 on: [ push, pull_request, workflow_dispatch ]
 jobs:
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: psf/black@stable
@@ -11,8 +11,8 @@ jobs:
       matrix:
         include:
           - runner: "macos-13" # Ventura Intel
-          - runner: "flyci-macos-large-latest-m1" # Ventura ARM
-          - runner: "macos-14" # Sonoma ARM
+          - runner: "macos-14" # Sequoia ARM
+          - runner: "macos-15" # Sonoma ARM
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout

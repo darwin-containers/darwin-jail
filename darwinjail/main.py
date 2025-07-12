@@ -86,16 +86,20 @@ def copy_files(target_dir: str, queue: dict[str, CopyOpts]) -> None:
             otool_output = ""
             try:
                 otool_output = (
-                    subprocess.check_output(["/usr/bin/otool", "-L", source_path], stderr=subprocess.STDOUT)
+                    subprocess.check_output(
+                        ["/usr/bin/otool", "-L", source_path], stderr=subprocess.STDOUT
+                    )
                     .decode("UTF-8")
                     .split("\n")
                 )
             except subprocess.CalledProcessError as err:
                 # Treat this error as warning (do not abort on macOS Monterey)
-                otool_error_datalayout = 'LLVM ERROR: Sized aggregate specification in datalayout string'
+                otool_error_datalayout = (
+                    "LLVM ERROR: Sized aggregate specification in datalayout string"
+                )
                 if err.stdout.decode("UTF-8").startswith(otool_error_datalayout):
                     print(otool_error_datalayout)
-                    print('for command:')
+                    print("for command:")
                     print(err.args)
 
             for line in otool_output:

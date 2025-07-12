@@ -91,6 +91,7 @@ def copy_files(target_dir: str, queue: dict[str, CopyOpts]) -> None:
                     .split("\n")
                 )
             except subprocess.CalledProcessError as err:
+                # Treat this error as warning (do not abort on macOS Monterey)
                 otool_error_datalayout = 'LLVM ERROR: Sized aggregate specification in datalayout string'
                 if err.stdout.decode("UTF-8").startswith(otool_error_datalayout):
                     print(otool_error_datalayout)

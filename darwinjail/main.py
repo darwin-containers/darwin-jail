@@ -83,11 +83,19 @@ def copy_files(target_dir: str, queue: dict[str, CopyOpts]) -> None:
         subprocess.check_call(["rsync", "-ah", source_path, full_target_path])
 
         if stat.S_ISREG(st.st_mode):
-            otool_output = (
-                subprocess.check_output(["/usr/bin/otool", "-L", source_path])
-                .decode("UTF-8")
-                .split("\n")
-            )
+            otool_output = ""
+            try:
+                otool_output = (
+                    subprocess.check_output(["/usr/bin/otool", "-L", source_path], stderr=subprocess.STDOUT)
+                    .decode("UTF-8")
+                    .split("\n")
+                )
+            except subprocess.CalledProcessError as err:
+                if err.stdout.decode("UTF-8").startswith('LLVM ERROR: Sized aggregate specification in datalayout string'):
+                    print('Suppressing error: LLVM ERROR: Sized aggregate specification in datalayout string')
+                    print('for command:')
+                    print(err.args)
+
             for line in otool_output:
                 if not line.startswith("\t"):
                     continue

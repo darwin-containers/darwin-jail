@@ -15,8 +15,8 @@ jobs:
             name: sonoma-arm64
     runs-on: ${{ matrix.runner }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
       - run: brew install crane
       - run: sudo python3 -m darwinjail jail_dir
       - run: sudo crane auth login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"

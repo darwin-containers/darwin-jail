@@ -101,6 +101,8 @@ def copy_files(target_dir: str, queue: dict[str, CopyOpts]) -> None:
                     print(otool_error_datalayout)
                     print("for command:")
                     print(err.args)
+                else:
+                    raise err
 
             for line in otool_output:
                 if not line.startswith("\t"):

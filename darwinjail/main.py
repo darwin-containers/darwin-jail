@@ -130,7 +130,7 @@ def copy_files(target_dir: str, queue: dict[str, CopyOpts]) -> None:
                         if f_path not in visited and f_path not in queue:
                             queue[f_path] = CopyOpts(target=f_path)
 
-    ff.write(f"successful OTOOL files: {tooled}\n")
+        ff.write(f"successful OTOOL files: {tooled}\n")
 
 
 def main():

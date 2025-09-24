@@ -38,3 +38,7 @@ ${rsync} ${options} /System/Library/CoreServices/SystemVersion.plist          ${
 ${rsync} ${options} /System/Library/CoreServices/SystemVersionCompat.plist    ${target}/
 ${rsync} ${options} /usr/share/                                               ${target}/
 ${rsync} ${options} /var/db/timezone/                                         ${target}/
+
+# Chroot sentinel file
+mkdir -p ${target}/AppleInternal/XBS
+touch ${target}/AppleInternal/XBS/.isChrooted

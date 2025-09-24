@@ -4,7 +4,7 @@
 
 rsync='/usr/local/bin/rsync'
 options='-a -h -R --progress'
-target='/Volumes/ram/fs'
+target='/Volumes/ram/target'
 
 # devices
 ${rsync} ${options} /dev/null     ${target}/

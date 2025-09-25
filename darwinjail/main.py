@@ -24,113 +24,101 @@ def build_queue(input_files: [str]) -> dict[str, CopyOpts]:
     queue: dict[str, CopyOpts] = dict()
     visited: set[str] = set()
 
-    with open('/Volumes/ram/build.txt', 'w') as f:
-        while len(files) > 0:
-            file = os.path.abspath(files.pop())
+    while len(files) > 0:
+        file = os.path.abspath(files.pop())
 
-            if file in visited:
-                raise AssertionError(f"same input file specified multiple times: {file}")
-            visited.add(file)
+        if file in visited:
+            raise AssertionError(f"same input file specified multiple times: {file}")
+        visited.add(file)
 
-            with open(file) as f:
-                for line in f.read().splitlines():
-                    line = line.strip()
-                    if len(line) <= 0:
-                        continue
+        with open(file) as f:
+            for line in f.read().splitlines():
+                line = line.strip()
+                if len(line) <= 0:
+                    continue
 
-                    if line.startswith(CONST_COMMENT_INSTRUCTION):
-                        continue
+                if line.startswith(CONST_COMMENT_INSTRUCTION):
+                    continue
 
-                    if line.startswith(CONST_INCLUDE_INSTRUCTION):
-                        include_file = line[len(CONST_INCLUDE_INSTRUCTION) :].strip()
-                        files.append(os.path.join(os.path.dirname(file), include_file))
+                if line.startswith(CONST_INCLUDE_INSTRUCTION):
+                    include_file = line[len(CONST_INCLUDE_INSTRUCTION) :].strip()
+                    files.append(os.path.join(os.path.dirname(file), include_file))
 
-                    parts = line.split(" ")
+                parts = line.split(" ")
 
-                    srcs = parts[0]
-                    for src in glob.glob(srcs):
-                        if len(parts) == 1:
-                            dst = parts[0]
-                        elif len(parts) == 2:
-                            dst = parts[1]
-                        else:
-                            raise AssertionError()
-                        queue[src] = CopyOpts(target=dst)
+                srcs = parts[0]
+                for src in glob.glob(srcs):
+                    if len(parts) == 1:
+                        dst = parts[0]
+                    elif len(parts) == 2:
+                        dst = parts[1]
+                    else:
+                        raise AssertionError()
+                    queue[src] = CopyOpts(target=dst)
 
     return queue
 
 
 def copy_files(target_dir: str, queue: dict[str, CopyOpts]) -> None:
     visited: Set[str] = set()
-    tooled: Set[str] = set()
 
-    with open('/Volumes/ram/copy.txt', 'w') as ff:
+    while len(queue) > 0:
+        source_path, copy_opts = queue.popitem()
+        visited.add(source_path)
 
-        ff.write(f"Initial Q size: {len(queue)}\n")
+        try:
+            st = os.lstat(source_path)
+        except FileNotFoundError:
+            if copy_opts.allow_absent:
+                # This happens due to dynamic linker cache on Big Sur and later
+                continue
+            else:
+                raise
 
-        while len(queue) > 0:
-            source_path, copy_opts = queue.popitem()
-            visited.add(source_path)
+        full_target_path = target_dir + copy_opts.target
 
+        # TODO: Preserve dir permissions
+        os.makedirs(os.path.dirname(full_target_path), exist_ok=True)
+
+        subprocess.check_call(["rsync", "-ah", source_path, full_target_path])
+
+        if stat.S_ISREG(st.st_mode):
+            otool_output = ""
             try:
-                st = os.lstat(source_path)
-            except FileNotFoundError:
-                if copy_opts.allow_absent:
-                    ff.write(f"File not found (allow absent): {source_path}\n")
-                    # This happens due to dynamic linker cache on Big Sur and later
-                    continue
+                otool_output = (
+                    subprocess.check_output(
+                        ["/usr/bin/otool", "-L", source_path], stderr=subprocess.STDOUT
+                    )
+                    .decode("UTF-8")
+                    .split("\n")
+                )
+            except subprocess.CalledProcessError as err:
+                # Treat this error as warning (do not abort on macOS Monterey)
+                otool_error_datalayout = (
+                    "LLVM ERROR: Sized aggregate specification in datalayout string"
+                )
+                if err.stdout.decode("UTF-8").startswith(otool_error_datalayout):
+                    print(otool_error_datalayout)
+                    print("for command:")
+                    print(err.args)
                 else:
-                    raise
+                    raise err
 
-            full_target_path = target_dir + copy_opts.target
+            for line in otool_output:
+                if not line.startswith("\t"):
+                    continue
 
-            # TODO: Preserve dir permissions
-            os.makedirs(os.path.dirname(full_target_path), exist_ok=True)
+                dependency = line.lstrip().split("(", 1)[0].rstrip()
+                if dependency in visited:
+                    continue
 
-            # subprocess.check_call(["rsync", "-ah", source_path, full_target_path])
-            # ff.write(f"Copied {source_path} to {full_target_path}\n")
-            if stat.S_ISREG(st.st_mode):
-                otool_output = ""
-                try:
-                    # ff.write(f"otooling {source_path}\n")
-                    otool_output = (
-                        subprocess.check_output(
-                            ["/usr/bin/otool", "-L", source_path], stderr=subprocess.STDOUT
-                        )
-                        .decode("UTF-8")
-                        .split("\n")
-                    )
-                except subprocess.CalledProcessError as err:
-                    # Treat this error as warning (do not abort on macOS Monterey)
-                    otool_error_datalayout = (
-                        "LLVM ERROR: Sized aggregate specification in datalayout string"
-                    )
-                    if err.stdout.decode("UTF-8").startswith(otool_error_datalayout):
-                        print(otool_error_datalayout)
-                        print("for command:")
-                        print(err.args)
-                    else:
-                        raise err
-
-                for line in otool_output:
-                    if not line.startswith("\t"):
-                        continue
-
-                    dependency = line.lstrip().split("(", 1)[0].rstrip()
-                    if dependency in visited:
-                        continue
-
-                    queue[dependency] = CopyOpts(target=dependency, allow_absent=True)
-                    ff.write(f"Queued dependency {dependency} as [{queue[dependency]}]\n")
-                    tooled.add(dependency)
-            elif stat.S_ISDIR(st.st_mode):
-                for d, _, files in os.walk(source_path):
-                    for f in files:
-                        f_path = os.path.join(d, f)
-                        if f_path not in visited and f_path not in queue:
-                            queue[f_path] = CopyOpts(target=f_path)
-
-        ff.write(f"successful OTOOL files: {tooled}\n")
+                queue[dependency] = CopyOpts(target=dependency, allow_absent=True)
+        elif stat.S_ISDIR(st.st_mode):
+            for d, _, files in os.walk(source_path):
+                for f in files:
+                    f_path = os.path.join(d, f)
+                    if f_path not in visited and f_path not in queue:
+                        queue[f_path] = CopyOpts(target=f_path)
 
 
 def main():

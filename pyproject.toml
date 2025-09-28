@@ -8,6 +8,9 @@ readme = "README.md"
 authors = [
     { name = "Marat Radchenko", email = "marat@slonopotamus.org" },
 ]
+dependencies = [
+    "packaging"
+]
 
 [build-system]
 requires = [

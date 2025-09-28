@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
-      - run: pip install .
+      - run: pip3 install .
       - run: brew install crane
       - run: sudo python3 -m darwinjail jail_dir
       - run: sudo crane auth login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"

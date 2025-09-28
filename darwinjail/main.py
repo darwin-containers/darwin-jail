@@ -3,6 +3,7 @@
 import argparse
 import glob
 import os
+import platform
 import stat
 import subprocess
 from dataclasses import dataclass
@@ -17,6 +18,8 @@ class CopyOpts:
 
 CONST_COMMENT_INSTRUCTION: str = "#"
 CONST_INCLUDE_INSTRUCTION: str = "@include"
+MAC_VER = float(platform.mac_ver()[0])
+VENTURA_VER = 13
 
 
 def build_queue(input_files: [str]) -> dict[str, CopyOpts]:
@@ -82,7 +85,7 @@ def copy_files(target_dir: str, queue: dict[str, CopyOpts]) -> None:
 
         subprocess.check_call(["rsync", "-ah", source_path, full_target_path])
 
-        if stat.S_ISREG(st.st_mode):
+        if MAC_VER < VENTURA_VER and stat.S_ISREG(st.st_mode):
             otool_output = ""
             try:
                 otool_output = (

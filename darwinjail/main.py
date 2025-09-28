@@ -8,6 +8,7 @@ import stat
 import subprocess
 from dataclasses import dataclass
 from typing import Set
+from packaging.version import Version
 
 
 @dataclass
@@ -18,8 +19,8 @@ class CopyOpts:
 
 CONST_COMMENT_INSTRUCTION: str = "#"
 CONST_INCLUDE_INSTRUCTION: str = "@include"
-MAC_VER = float(platform.mac_ver()[0])
-VENTURA_VER = 13
+MAC_VER = Version(platform.mac_ver()[0])
+VENTURA_VER = Version("13")
 
 
 def build_queue(input_files: [str]) -> dict[str, CopyOpts]:

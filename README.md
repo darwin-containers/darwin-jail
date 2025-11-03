@@ -23,7 +23,28 @@ sudo mkdir -p "$jail_dir/var/run"
 sudo link -f /var/run/mDNSResponder "$jail_dir/var/run/mDNSResponder"
 ```
 
-## Uploading Darwin rootfs as Docker image
+<!--
+TODO: This should fix https://github.com/darwin-containers/darwin-jail/issues/11
+TODO: Doesn't work, see https://github.com/moby/buildkit/issues/5544
+
+## Uploading Darwin rootfs as Docker image (with Docker)
+
+Create a simple Dockerfile:
+
+```dockerfile
+FROM scratch
+COPY . .
+```
+
+Build and upload Docker image to registry
+
+```shell
+sudo docker buildx build -f Dockerfile $jail_dir --output type=image,name=$image_tag,compression=zstd,oci-mediatypes=true,platform=darwin/arm64
+```
+
+-->
+
+## Uploading Darwin rootfs as Docker image (without Docker)
 
 ```shell
 brew install crane

@@ -7,7 +7,6 @@ import platform
 import stat
 import subprocess
 from dataclasses import dataclass
-from typing import Set
 from packaging.version import Version
 
 
@@ -23,7 +22,7 @@ MAC_VER = Version(platform.mac_ver()[0])
 VENTURA_VER = Version("13")
 
 
-def build_queue(input_files: [str]) -> dict[str, CopyOpts]:
+def build_queue(input_files: list[str]) -> dict[str, CopyOpts]:
     files = list(input_files)
     queue: dict[str, CopyOpts] = dict()
     visited: set[str] = set()
@@ -47,11 +46,12 @@ def build_queue(input_files: [str]) -> dict[str, CopyOpts]:
                 if line.startswith(CONST_INCLUDE_INSTRUCTION):
                     include_file = line[len(CONST_INCLUDE_INSTRUCTION) :].strip()
                     files.append(os.path.join(os.path.dirname(file), include_file))
+                    continue
 
                 parts = line.split(" ")
 
                 srcs = parts[0]
-                for src in glob.glob(srcs):
+                for src in glob.glob(srcs, include_hidden=True):
                     if len(parts) == 1:
                         dst = parts[0]
                     elif len(parts) == 2:
@@ -64,7 +64,7 @@ def build_queue(input_files: [str]) -> dict[str, CopyOpts]:
 
 
 def copy_files(target_dir: str, queue: dict[str, CopyOpts]) -> None:
-    visited: Set[str] = set()
+    visited: set[str] = set()
 
     while len(queue) > 0:
         source_path, copy_opts = queue.popitem()

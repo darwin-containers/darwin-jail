@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
       - run: pip3 install --break-system-packages .
       - name: Create jail
         run: sudo python3 -m darwinjail jail
